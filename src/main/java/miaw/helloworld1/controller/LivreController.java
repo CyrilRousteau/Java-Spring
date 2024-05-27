@@ -7,77 +7,76 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
+@RequestMapping("/livres")
 public class LivreController {
 
     @Autowired
     private LivreRepository livreRepository;
 
-    @GetMapping("/ajouterLivre")
+    @GetMapping("/ajouter")
     public String afficherFormulaireLivre() {
-        return "helloworld1/livre";
+        return "helloworld1/ajouterLivre";
     }
 
-    @PostMapping("/ajouterLivre")
-    public String ajouterLivre(@RequestParam String titre, @RequestParam String genre, @RequestParam String datePublication, ModelMap map) {
-        LocalDate date = LocalDate.parse(datePublication);
-        Livre livre = new Livre(titre, genre, date);
+    @PostMapping("/ajouter")
+    public String ajouterLivre(@RequestParam String titre, @RequestParam int nombrePages, ModelMap map) {
+        Livre livre = new Livre(titre, nombrePages);
         livreRepository.save(livre);
         map.put("message", "Livre ajouté avec succès !");
-        return "helloworld1/livre";
+        return "helloworld1/ajouterLivre";
     }
 
-    @GetMapping("/listeLivres")
-    @ResponseBody
-    public String listeLivres() {
+    @GetMapping("/liste")
+    public String liste(ModelMap map) {
         List<Livre> livres = livreRepository.findAll();
-        StringBuilder result = new StringBuilder();
-        for (Livre livre : livres) {
-            result.append("Livre id=").append(livre.getId())
-                  .append(", titre=").append(livre.getTitre())
-                  .append(", genre=").append(livre.getGenre())
-                  .append(", datePublication=").append(livre.getDatePublication())
-                  .append("<br>");
-        }
-        return result.toString();
+        map.put("livres", livres);
+        return "helloworld1/listeLivres";
     }
 
-    @GetMapping("/livre/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public String afficherLivre(@PathVariable Long id) {
         Livre livre = livreRepository.findById(id).orElse(null);
         if (livre == null) {
             return "Livre non trouvé.";
         }
-        return "Livre id=" + livre.getId() + ", titre=" + livre.getTitre() + ", genre=" + livre.getGenre() + ", datePublication=" + livre.getDatePublication();
+        return "Livre id=" + livre.getId() + ", titre=" + livre.getTitre() + ", nombrePages=" + livre.getNombrePages();
     }
 
-    @GetMapping("/supprimerLivre/{id}")
-    @ResponseBody
-    public String supprimerLivre(@PathVariable Long id) {
+    @GetMapping("/supprimer/{id}")
+    public String supprimerLivre(@PathVariable Long id, ModelMap map) {
         if (livreRepository.existsById(id)) {
             livreRepository.deleteById(id);
-            return "Livre supprimé avec succès.";
-        } else {
-            return "Livre non trouvé.";
         }
+        return "redirect:/livres/liste";
     }
 
-    @GetMapping("/modifierLivre")
-    @ResponseBody
-    public String modifierLivre(@RequestParam Long id, @RequestParam String titre, @RequestParam String genre, @RequestParam String datePublication) {
+    @GetMapping("/modifier")
+    public String afficherFormulaireModification(@RequestParam Long id, ModelMap map) {
         Livre livre = livreRepository.findById(id).orElse(null);
         if (livre == null) {
-            return "Livre non trouvé.";
+            map.put("message", "Livre non trouvé.");
+            return "helloworld1/modifierLivre";
         }
-        LocalDate date = LocalDate.parse(datePublication);
+        map.put("livre", livre);
+        return "helloworld1/modifierLivre";
+    }
+
+    @PostMapping("/modifier")
+    public String modifierLivre(@RequestParam Long id, @RequestParam String titre, @RequestParam int nombrePages, ModelMap map) {
+        Livre livre = livreRepository.findById(id).orElse(null);
+        if (livre == null) {
+            map.put("message", "Livre non trouvé.");
+            return "helloworld1/modifierLivre";
+        }
         livre.setTitre(titre);
-        livre.setGenre(genre);
-        livre.setDatePublication(date);
+        livre.setNombrePages(nombrePages);
         livreRepository.save(livre);
-        return "Livre modifié avec succès : id=" + livre.getId() + ", titre=" + livre.getTitre() + ", genre=" + livre.getGenre() + ", datePublication=" + livre.getDatePublication();
+        map.put("message", "Livre modifié avec succès.");
+        map.put("livre", livre);
+        return "helloworld1/modifierLivre";
     }
 }

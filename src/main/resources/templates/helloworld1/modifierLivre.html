@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifier Livre</title>
+</head>
+<body>
+    <h1>Modifier Livre</h1>
+    <form th:action="@{/livres/modifier}" method="post">
+        <input type="hidden" th:value="${livre.id}" name="id"/>
+        <div>
+            <label for="titre">Titre:</label>
+            <input type="text" id="titre" name="titre" th:value="${livre.titre}" required>
+        </div>
+        <div>
+            <label for="nombrePages">Nombre de Pages:</label>
+            <input type="number" id="nombrePages" name="nombrePages" th:value="${livre.nombrePages}" required>
+        </div>
+        <button type="submit">Modifier</button>
+    </form>
+    <div th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+    <a href="/livres/liste">Retour à la liste des livres</a>
+</body>
+</html>

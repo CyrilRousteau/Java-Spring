@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modifier Auteur</title>
+</head>
+<body>
+    <h1>Modifier Auteur</h1>
+    <form th:action="@{/auteurs/modifier}" method="post">
+        <input type="hidden" th:value="${auteur.id}" name="id"/>
+        <div>
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom" th:value="${auteur.nom}" required>
+        </div>
+        <div>
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" name="prenom" th:value="${auteur.prenom}" required>
+        </div>
+        <button type="submit">Modifier</button>
+    </form>
+    <div th:if="${message}">
+        <p th:text="${message}"></p>
+    </div>
+    <a href="/auteurs/liste">Retour à la liste des auteurs</a>
+</body>
+</html>

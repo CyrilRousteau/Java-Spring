@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Ajout Auteur</title>
+    <title>Ajouter Auteur</title>
 </head>
 <body>
     <h1>Ajouter un Auteur</h1>
-    <form th:action="@{/ajouterAuteur}" method="post">
+    <form th:action="@{/auteurs/ajouter}" method="post">
         <div>
             <label for="nom">Nom:</label>
             <input type="text" id="nom" name="nom" required>
@@ -19,5 +19,6 @@
     <div th:if="${message}">
         <p th:text="${message}"></p>
     </div>
+    <li><a href="/auteurs/liste">Retour à la liste des Auteurs</a></li>
 </body>
 </html>

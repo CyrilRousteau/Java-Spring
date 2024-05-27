@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Liste des Livres</title>
+</head>
+<body>
+    <h1>Liste des Livres</h1>
+    <a href="/accueil">Accueil</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Nombre de Pages</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="livre : ${livres}">
+                <td th:text="${livre.titre}"></td>
+                <td th:text="${livre.nombrePages}"></td>
+                <td>
+                    <a th:href="@{/livres/modifier(id=${livre.id})}">Modifier</a>
+                    <a th:href="@{/livres/supprimer/{id}(id=${livre.id})}">Supprimer</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <a href="/livres/ajouter">Ajouter un Livre</a>
+</body>
+</html>

@@ -10,39 +10,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
+@RequestMapping("/auteurs")
 public class AuteurController {
 
     @Autowired
     private AuteurRepository auteurRepository;
 
-    @GetMapping("/ajouterAuteur")
+    @GetMapping("/ajouter")
     public String afficherFormulaire() {
-        return "helloworld1/auteur";
+        return "helloworld1/ajouterAuteur";
     }
 
-    @PostMapping("/ajouterAuteur")
+    @PostMapping("/ajouter")
     public String ajouterAuteur(@RequestParam String nom, @RequestParam String prenom, ModelMap map) {
         Auteur auteur = new Auteur(nom, prenom);
         auteurRepository.save(auteur);
         map.put("message", "Auteur ajouté avec succès !");
-        return "helloworld1/auteur";
+        return "helloworld1/ajouterAuteur";
     }
 
-    @GetMapping("/listAuteurs")
-    @ResponseBody
-    public String liste() {
+    @GetMapping("/liste")
+    public String liste(ModelMap map) {
         List<Auteur> auteurs = auteurRepository.findAll();
-        StringBuilder result = new StringBuilder();
-        for (Auteur auteur : auteurs) {
-            result.append("Auteur id=").append(auteur.getId())
-                  .append(", nom=").append(auteur.getNom())
-                  .append(", prenom=").append(auteur.getPrenom())
-                  .append("<br>");
-        }
-        return result.toString();
+        map.put("auteurs", auteurs);
+        return "helloworld1/listeAuteurs";
     }
 
-    @GetMapping("/auteur/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public String afficherAuteur(@PathVariable Long id) {
         Auteur auteur = auteurRepository.findById(id).orElse(null);
@@ -52,27 +46,38 @@ public class AuteurController {
         return "Auteur id=" + auteur.getId() + ", nom=" + auteur.getNom() + ", prenom=" + auteur.getPrenom();
     }
 
-    @GetMapping("/supprimerAuteur/{id}")
-    @ResponseBody
-    public String supprimerAuteur(@PathVariable Long id) {
+    @GetMapping("/supprimer/{id}")
+    public String supprimerAuteur(@PathVariable Long id, ModelMap map) {
         if (auteurRepository.existsById(id)) {
             auteurRepository.deleteById(id);
-            return "Auteur supprimé avec succès.";
-        } else {
-            return "Auteur non trouvé.";
         }
+        return "redirect:/auteurs/liste";
     }
 
-    @GetMapping("/modifierAuteur")
-    @ResponseBody
-    public String modifierAuteur(@RequestParam Long id, @RequestParam String nom, @RequestParam String prenom) {
+
+    @GetMapping("/modifier")
+    public String afficherFormulaireModification(@RequestParam Long id, ModelMap map) {
         Auteur auteur = auteurRepository.findById(id).orElse(null);
         if (auteur == null) {
-            return "Auteur non trouvé.";
+            map.put("message", "Auteur non trouvé.");
+            return "helloworld1/modifierAuteur";
+        }
+        map.put("auteur", auteur);
+        return "helloworld1/modifierAuteur";
+    }
+
+    @PostMapping("/modifier")
+    public String modifierAuteur(@RequestParam Long id, @RequestParam String nom, @RequestParam String prenom, ModelMap map) {
+        Auteur auteur = auteurRepository.findById(id).orElse(null);
+        if (auteur == null) {
+            map.put("message", "Auteur non trouvé.");
+            return "helloworld1/modifierAuteur";
         }
         auteur.setNom(nom);
         auteur.setPrenom(prenom);
         auteurRepository.save(auteur);
-        return "Auteur modifié avec succès : id=" + auteur.getId() + ", nom=" + auteur.getNom() + ", prenom=" + auteur.getPrenom();
+        map.put("message", "Auteur modifié avec succès.");
+        map.put("auteur", auteur);
+        return "helloworld1/modifierAuteur";
     }
 }

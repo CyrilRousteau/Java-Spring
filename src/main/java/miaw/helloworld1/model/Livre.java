@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
 
 @Entity
 public class Livre {
@@ -13,16 +12,14 @@ public class Livre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String titre;
-    private String genre;
-    private LocalDate datePublication;
+    private int nombrePages;
 
     public Livre() {
     }
 
-    public Livre(String titre, String genre, LocalDate datePublication) {
+    public Livre(String titre, int nombrePages) {
         this.titre = titre;
-        this.genre = genre;
-        this.datePublication = datePublication;
+        this.nombrePages = nombrePages;
     }
 
     public Long getId() {
@@ -41,20 +38,12 @@ public class Livre {
         this.titre = titre;
     }
 
-    public String getGenre() {
-        return genre;
+    public int getNombrePages() {
+        return nombrePages;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public LocalDate getDatePublication() {
-        return datePublication;
-    }
-
-    public void setDatePublication(LocalDate datePublication) {
-        this.datePublication = datePublication;
+    public void setNombrePages(int nombrePages) {
+        this.nombrePages = nombrePages;
     }
 
     @Override
@@ -62,8 +51,7 @@ public class Livre {
         return "Livre{" +
                "id=" + id +
                ", titre='" + titre + '\'' +
-               ", genre='" + genre + '\'' +
-               ", datePublication=" + datePublication +
+               ", nombrePages=" + nombrePages +
                '}';
     }
 }

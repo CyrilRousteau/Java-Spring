@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Ajout Livre</title>
+    <title>Ajouter Livre</title>
 </head>
 <body>
     <h1>Ajouter un Livre</h1>
-    <form th:action="@{/ajouterLivre}" method="post">
+    <form th:action="@{/livres/ajouter}" method="post">
         <div>
             <label for="titre">Titre:</label>
             <input type="text" id="titre" name="titre" required>
         </div>
         <div>
-            <label for="genre">Genre:</label>
-            <input type="text" id="genre" name="genre" required>
-        </div>
-        <div>
-            <label for="datePublication">Date de Publication:</label>
-            <input type="date" id="datePublication" name="datePublication" required>
+            <label for="nombrePages">Nombre de Pages:</label>
+            <input type="number" id="nombrePages" name="nombrePages" required>
         </div>
         <button type="submit">Ajouter</button>
     </form>
     <div th:if="${message}">
         <p th:text="${message}"></p>
     </div>
+    <li><a href="/livres/liste">Retour à la liste des Livres</a></li>
 </body>
 </html>
