@@ -80,4 +80,18 @@ public class LivreController {
         map.put("livre", livre);
         return "helloworld1/modifierLivre";
     }
+
+     // Méthode pour la modification directe via l'URL
+     @GetMapping("/modifierViaUrl")
+     public String modifierViaUrl(@RequestParam Long id, @RequestParam String titre, @RequestParam int nombrePages) {
+         Livre livre = livreRepository.findById(id).orElse(null);
+         if (livre == null) {
+             return "redirect:/livres/liste";
+         }
+         livre.setTitre(titre);
+         livre.setNombrePages(nombrePages);
+         livreRepository.save(livre);
+         return "redirect:/livres/liste";
+     }
+
 }

@@ -80,4 +80,17 @@ public class AuteurController {
         map.put("auteur", auteur);
         return "helloworld1/modifierAuteur";
     }
+
+     // Méthode pour la modification directe via l'URL
+     @GetMapping("/modifierViaUrl")
+     public String modifierViaUrl(@RequestParam Long id, @RequestParam String nom, @RequestParam String prenom) {
+         Auteur auteur = auteurRepository.findById(id).orElse(null);
+         if (auteur == null) {
+             return "redirect:/auteurs/liste";
+         }
+         auteur.setNom(nom);
+         auteur.setPrenom(prenom);
+         auteurRepository.save(auteur);
+         return "redirect:/auteurs/liste";
+     }
 }
