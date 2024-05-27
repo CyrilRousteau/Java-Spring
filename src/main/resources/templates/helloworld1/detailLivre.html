@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Détail du Livre</title>
+</head>
+<body>
+    <h1>Détail du Livre</h1>
+    <p th:if="${message}" th:text="${message}"></p>
+    <div th:if="${livre}">
+        <p><strong>Titre:</strong> <span th:text="${livre.titre}"></span></p>
+        <p><strong>Nombre de Pages:</strong> <span th:text="${livre.nombrePages}"></span></p>
+    </div>
+    <a href="/livres/liste">Retour à la liste des livres</a>
+</body>
+</html>

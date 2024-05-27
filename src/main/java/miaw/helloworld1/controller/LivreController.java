@@ -36,18 +36,19 @@ public class LivreController {
         return "helloworld1/listeLivres";
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public String afficherLivre(@PathVariable Long id) {
+    @GetMapping("/detail/{id}")
+    public String detailLivre(@PathVariable Long id, ModelMap map) {
         Livre livre = livreRepository.findById(id).orElse(null);
         if (livre == null) {
-            return "Livre non trouvé.";
+            map.put("message", "Livre non trouvé.");
+            return "helloworld1/detailLivre";
         }
-        return "Livre id=" + livre.getId() + ", titre=" + livre.getTitre() + ", nombrePages=" + livre.getNombrePages();
+        map.put("livre", livre);
+        return "helloworld1/detailLivre";
     }
 
     @GetMapping("/supprimer/{id}")
-    public String supprimerLivre(@PathVariable Long id, ModelMap map) {
+    public String supprimerLivre(@PathVariable Long id) {
         if (livreRepository.existsById(id)) {
             livreRepository.deleteById(id);
         }

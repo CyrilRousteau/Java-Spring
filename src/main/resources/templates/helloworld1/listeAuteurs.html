@@ -11,12 +11,12 @@
             <tr>
                 <th>Nom</th>
                 <th>Prénom</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="auteur : ${auteurs}">
-                <td th:text="${auteur.nom}"></td>
+                <td><a th:href="@{/auteurs/detail/{id}(id=${auteur.id})}" th:text="${auteur.nom}"></a></td>
                 <td th:text="${auteur.prenom}"></td>
                 <td>
                     <a th:href="@{/auteurs/modifier(id=${auteur.id})}">Modifier</a>

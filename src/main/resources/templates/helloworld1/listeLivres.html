@@ -11,12 +11,12 @@
             <tr>
                 <th>Titre</th>
                 <th>Nombre de Pages</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <tr th:each="livre : ${livres}">
-                <td th:text="${livre.titre}"></td>
+                <td><a th:href="@{/livres/detail/{id}(id=${livre.id})}" th:text="${livre.titre}"></a></td>
                 <td th:text="${livre.nombrePages}"></td>
                 <td>
                     <a th:href="@{/livres/modifier(id=${livre.id})}">Modifier</a>

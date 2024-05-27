@@ -36,24 +36,24 @@ public class AuteurController {
         return "helloworld1/listeAuteurs";
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public String afficherAuteur(@PathVariable Long id) {
+    @GetMapping("/detail/{id}")
+    public String detailAuteur(@PathVariable Long id, ModelMap map) {
         Auteur auteur = auteurRepository.findById(id).orElse(null);
         if (auteur == null) {
-            return "Auteur non trouvé.";
+            map.put("message", "Auteur non trouvé.");
+            return "helloworld1/detailAuteur";
         }
-        return "Auteur id=" + auteur.getId() + ", nom=" + auteur.getNom() + ", prenom=" + auteur.getPrenom();
+        map.put("auteur", auteur);
+        return "helloworld1/detailAuteur";
     }
 
     @GetMapping("/supprimer/{id}")
-    public String supprimerAuteur(@PathVariable Long id, ModelMap map) {
+    public String supprimerAuteur(@PathVariable Long id) {
         if (auteurRepository.existsById(id)) {
             auteurRepository.deleteById(id);
         }
         return "redirect:/auteurs/liste";
     }
-
 
     @GetMapping("/modifier")
     public String afficherFormulaireModification(@RequestParam Long id, ModelMap map) {
